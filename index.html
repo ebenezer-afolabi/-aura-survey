@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fashion Shopping Survey</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#FAF6F0;--card:#FFFFFF;--ink:#171513;--mut:#75685E;--line:#E3D7CA;--gold:#C8921A;--soft:#FBF1DC;--err:#B3261E;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141210;--card:#1D1A17;--ink:#F3EBE0;--mut:#A89B8E;--line:#352F29;--gold:#E0AE3A;--soft:#2B2416;--err:#F2766D}}
+:root[data-theme="dark"]{--bg:#141210;--card:#1D1A17;--ink:#F3EBE0;--mut:#A89B8E;--line:#352F29;--gold:#E0AE3A;--soft:#2B2416;--err:#F2766D}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+.wrap{max-width:640px;margin:0 auto;padding:0 20px 64px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:11;background:var(--bg);padding:14px 0 10px}
+.bar{height:3px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--gold);transition:width .4s ease}
+.meta{display:flex;justify-content:space-between;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin-top:8px}
+.brand{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;letter-spacing:.14em;color:var(--ink);font-size:13px}
+h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;margin:0;line-height:1.1}
+h1{font-size:clamp(38px,9vw,56px);margin:36px 0 14px}
+h2{font-size:30px;margin:28px 0 4px}
+.lead{color:var(--mut);margin:0 0 8px;max-width:48ch}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 20px;margin-top:18px}
+.q{padding:18px 0;border-top:1px solid var(--line)}
+.q:first-of-type{border-top:0;padding-top:4px}
+.qt{font-weight:600;margin:0 0 4px}
+.qt b{color:var(--gold);font-weight:600;margin-right:8px}
+.hint{font-size:13px;color:var(--mut);margin:0 0 10px}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.opt input,.dot input{position:absolute;opacity:0;pointer-events:none}
+.opt span{display:block;padding:10px 16px;border:1px solid var(--line);border-radius:999px;cursor:pointer;font-size:15px;transition:.15s}
+.opt span:hover{border-color:var(--gold)}
+.opt input:checked+span{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.opt input:focus-visible+span,.dot input:focus-visible+span{outline:2px solid var(--gold);outline-offset:2px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px dashed var(--line)}
+.row:first-of-type{border-top:0}
+.row>div{font-size:15px}
+.dots{display:flex;gap:6px}
+.dot span{display:grid;place-items:center;width:34px;height:34px;border:1px solid var(--line);border-radius:50%;font-size:14px;cursor:pointer;transition:.15s}
+.dot input:checked+span{background:var(--gold);border-color:var(--gold);color:#171513;font-weight:600}
+input[type=text],textarea{width:100%;font:inherit;color:var(--ink);background:transparent;border:0;border-bottom:1.5px solid var(--line);padding:10px 2px;margin-top:6px;border-radius:0;outline:0;resize:vertical}
+input[type=text]:focus,textarea:focus{border-color:var(--gold)}
+.q.err{background:linear-gradient(90deg,var(--err),var(--err)) left/3px 100% no-repeat;padding-left:14px}
+.msg{color:var(--err);font-size:13px;margin:8px 0 0;min-height:0}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:22px}
+button{font:600 15px Inter,system-ui,sans-serif;border-radius:999px;padding:14px 26px;cursor:pointer;border:1px solid var(--ink);transition:.15s}
+.go{background:var(--ink);color:var(--bg);margin-left:auto}
+.go:hover{background:var(--gold);border-color:var(--gold);color:#171513}
+.go:disabled{opacity:.5;cursor:wait}
+.back{background:transparent;color:var(--ink);border-color:var(--line)}
+.end{text-align:center;padding:40px 8px}
+.end .mark{font-size:44px;color:var(--gold)}
+.end p{color:var(--mut);max-width:44ch;margin:8px auto}
+.fade{animation:in .35s ease}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (max-width:480px){.row{flex-direction:column;align-items:flex-start}}
+@media (prefers-reduced-motion:reduce){.fade{animation:none}.bar i{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div class="bar"><i id="pb"></i></div><div class="meta"><span class="brand">Fashion Shopping Survey</span><span id="stepl"></span></div></div>
+  <div id="intro">
+    <h1>How do you shop for fashion online?</h1>
+    <p class="lead">A 3-minute survey about where you buy clothes, shoes and accessories, and why. There are no right or wrong answers, and your responses are anonymous.</p>
+  </div>
+  <div id="stage"></div>
+</div>
+<script>
+// STEP 1: paste your Google Apps Script web app link between the quotes below
+var ENDPOINT="https://script.google.com/macros/s/AKfycbyTpq182YW_GfR0e5zICY0O7-faXrQTWLtOaj8aa2JPWy-7hPCKMdztDJUbxLzQzGAw/exec";
+var L=["Jumia","Temu","AliExpress or 1688","Konga or other marketplaces","Instagram or WhatsApp vendors","A brand’s own website","Other"];
+var Q={
+1:{t:"How old are you?",k:"s",o:["Under 18","18–24","25–34","35–44","45+"]},
+2:{t:"Which state or city do you live in?",k:"t",opt:1,ph:"e.g. Lagos"},
+3:{t:"Have you bought clothing, shoes or accessories online in the last 12 months?",k:"s",o:["Yes","No"]},
+4:{t:"Where have you bought fashion items online?",h:"Select all that apply.",k:"m",o:L},
+5:{t:"Which ones do you use most often for fashion?",h:"Select up to 2.",k:"m",max:2,o:function(){return A[4]&&A[4].length?A[4]:L}},
+6:{t:"How often do you buy fashion online?",k:"s",o:["Weekly","Monthly","Every few months","Once or twice a year","Only when I need something"]},
+7:{t:"In the last 12 months, about how much did you spend on fashion online?",k:"s",o:["Under ₦20,000","₦20,000–₦50,000","₦50,000–₦100,000","₦100,000–₦250,000","Over ₦250,000"]},
+8:{t:"If you could choose, where would you prefer to buy fashion?",k:"s",o:["A marketplace like Jumia or Temu","Directly from the brand’s website","An Instagram or WhatsApp vendor"]},
+9:{t:"What makes you choose a marketplace?",h:"Select up to 3.",k:"m",max:3,o:["Lower prices","Discounts","More variety","Easy returns","Trust in the platform","Fast delivery","Pay on delivery","Other"]},
+10:{t:"What makes you choose a brand’s own website?",h:"Select up to 3.",k:"m",max:3,o:["Authentic products","Unique or exclusive styles","Better customer service","Support for the brand","Other"]},
+11:{t:"How much more would you pay for the same item from a brand you trust, compared with a marketplace?",k:"s",o:["Nothing","Up to 10%","10–25%","25–50%","More than 50%"]},
+12:{t:"Have you ever received an online fashion order that looked different from the photos?",k:"s",o:["Yes","No"]},
+13:{t:"Have you ever been scammed when buying fashion online?",k:"s",o:["Yes","No","Prefer not to say"]},
+14:{t:"How important is each of these when buying from a brand you don’t know yet?",h:"1 = not important, 5 = very important.",k:"g",o:["Clear sizing guide","Real customer photos","Return policy","Pay on delivery","Secure card payment","Delivery time estimate","Reviews","Instagram presence"]},
+15:{t:"Which descriptions sound like something you would buy?",h:"Select all that apply.",k:"m",o:["Premium, contemporary African ready-to-wear","Trendy and affordable fast fashion","Traditional and cultural wear","Streetwear","Luxury designer"]},
+16:{t:"If a new Nigerian fashion brand had an online store, what would make you trust it enough to place your first order there?",k:"t",min:10,long:1,ph:"Tell us in your own words"}
+};
+var S=[["About you",[1,2,3]],["Where you buy",[4,5,6,7]],["Marketplace or brand",[8,9,10,11]],["Trust",[12,13,14]],["The brand",[15,16]]];
+var A={},step=0,stage=document.getElementById("stage");
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;")}
+function opts(q){return typeof q.o==="function"?q.o():q.o}
+function qhtml(id){
+  var q=Q[id],h='<div class="q" data-q="'+id+'"><p class="qt"><b>'+id+'</b>'+esc(q.t)+(q.opt?' <span style="color:var(--mut);font-weight:400">(optional)</span>':'')+'</p>';
+  if(q.h)h+='<p class="hint">'+q.h+'</p>';
+  if(q.k==="s"||q.k==="m"){
+    h+='<div class="opts">';
+    opts(q).forEach(function(o){
+      var on=q.k==="s"?A[id]===o:(A[id]||[]).indexOf(o)>-1;
+      h+='<label class="opt"><input type="'+(q.k==="s"?"radio":"checkbox")+'" name="q'+id+'" value="'+esc(o)+'"'+(on?" checked":"")+'><span>'+esc(o)+'</span></label>';
+    });
+    h+='</div>';
+  }else if(q.k==="t"){
+    var v=esc(A[id]||"");
+    h+=q.long?'<textarea rows="3" name="q'+id+'" placeholder="'+q.ph+'">'+v+'</textarea>':'<input type="text" name="q'+id+'" placeholder="'+q.ph+'" value="'+v+'">';
+  }else{
+    q.o.forEach(function(f,i){
+      h+='<div class="row"><div>'+f+'</div><div class="dots">';
+      for(var n=1;n<=5;n++)h+='<label class="dot"><input type="radio" name="g'+i+'" value="'+n+'"'+((A[id]||{})[f]===n?" checked":"")+'><span>'+n+'</span></label>';
+      h+='</div></div>';
+    });
+  }
+  return h+'<p class="msg" role="alert"></p></div>';
+}
+function render(){
+  var s=S[step],last=step===S.length-1;
+  document.getElementById("pb").style.width=((step+1)/S.length*100)+"%";
+  document.getElementById("stepl").textContent="Step "+(step+1)+" of "+S.length;
+  document.getElementById("intro").style.display=step===0?"":"none";
+  stage.innerHTML='<div class="fade"><h2>'+s[0]+'</h2><div class="card">'+s[1].map(qhtml).join("")+'</div><div class="nav">'+(step?'<button class="back" id="bk">Back</button>':'')+'<button class="go" id="nx">'+(last?"Submit":"Continue")+'</button></div></div>';
+  if(step)window.scrollTo({top:0,behavior:"smooth"});
+}
+stage.addEventListener("change",function(e){
+  var t=e.target,box=t.closest(".q");if(!box)return;
+  var id=+box.dataset.q,q=Q[id];
+  if(q.k==="s")A[id]=t.value;
+  else if(q.k==="m"){
+    var v=[].map.call(box.querySelectorAll("input:checked"),function(i){return i.value});
+    if(q.max&&v.length>q.max){t.checked=false;box.querySelector(".msg").textContent="You can choose up to "+q.max+".";return}
+    A[id]=v;
+  }else if(q.k==="g"){
+    var g={};Q[14].o.forEach(function(f,i){var c=box.querySelector('input[name="g'+i+'"]:checked');if(c)g[f]=+c.value});A[id]=g;
+  }
+  box.classList.remove("err");box.querySelector(".msg").textContent="";
+  if(id===4&&A[5])A[5]=A[5].filter(function(x){return A[4].indexOf(x)>-1});
+});
+stage.addEventListener("input",function(e){var box=e.target.closest(".q");if(box&&Q[+box.dataset.q].k==="t")A[+box.dataset.q]=e.target.value.trim()});
+stage.addEventListener("click",function(e){
+  if(e.target.id==="bk"){step--;render()}
+  if(e.target.id==="nx"){next(e.target)}
+});
+function missing(id){
+  var q=Q[id],a=A[id];if(q.opt)return false;
+  if(q.k==="t"&&q.min)return !a||a.length<q.min;
+  if(q.k==="m")return !a||!a.length;
+  if(q.k==="g")return !a||Object.keys(a).length<q.o.length;
+  return !a;
+}
+function next(btn){
+  var bad=null;
+  S[step][1].forEach(function(id){
+    var box=stage.querySelector('[data-q="'+id+'"]');
+    if(missing(id)){box.classList.add("err");box.querySelector(".msg").textContent=Q[id].k==="g"?"Please rate every row.":Q[id].k==="t"?"Please write a short answer (at least "+Q[id].min+" characters).":"Please choose an answer.";bad=bad||box}
+  });
+  if(bad){bad.scrollIntoView({behavior:"smooth",block:"center"});return}
+  if(step===0&&A[3]==="No"){return done("screen")}
+  if(step<S.length-1){step++;return render()}
+  submit(btn);
+}
+function record(){
+  var r={};
+  for(var i=1;i<=15;i++){var a=A[i];r["q"+i]=Array.isArray(a)?a.join("; "):(a||"")}
+  Q[14].o.forEach(function(f,i){r["q14_"+i]=(A[14]||{})[f]||""});
+  r.q16=A[16]||"";
+  return r;
+}
+function fail(m){
+  var nav=stage.querySelector(".nav"),p=document.getElementById("sf");
+  if(!p){p=document.createElement("p");p.id="sf";p.className="msg";p.setAttribute("role","alert");nav.parentNode.insertBefore(p,nav)}
+  p.textContent=m;
+}
+async function submit(btn){
+  if(ENDPOINT.indexOf("http")!==0){return fail("This form is not connected to a Google Sheet yet. Paste your Apps Script link at the top of the file.")}
+  btn.disabled=true;btn.textContent="Sending…";
+  try{
+    await fetch(ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(record())});
+    done("saved");
+  }catch(err){
+    btn.disabled=false;btn.textContent="Try again";
+    fail("No internet connection. Your answers are still here. Tap Try again when you are back online.");
+  }
+}
+function done(kind){
+  document.getElementById("pb").style.width="100%";
+  document.getElementById("stepl").textContent="Done";
+  document.getElementById("intro").style.display="none";
+  var h='<div class="card end fade"><div class="mark">✦</div><h2>Thank you</h2>';
+  h+=kind==="screen"?'<p>This survey is for people who have bought fashion online in the last 12 months. We appreciate your time.</p>':'<p>Your response has been recorded. We really appreciate your time.</p>';
+  stage.innerHTML=h+'</div>';
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+render();
+</script>
+</body>
+</html>
